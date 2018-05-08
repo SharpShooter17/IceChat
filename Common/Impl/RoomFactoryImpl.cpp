@@ -5,11 +5,11 @@
 #include "RoomFactoryImpl.hpp"
 
 
-RoomPrx RoomFactoryImpl::createRoom(const ::std::string& name, const ::Ice::Current& current = ::Ice::emptyCurrent)
+Chat::RoomPrx RoomFactoryImpl::createRoom(const std::string& name, const Ice::Current& current)
 {
     return Chat::RoomPrx;
 }
-RoomList RoomFactoryImpl::getRooms(const ::Ice::Current& current = ::Ice::emptyCurrent)
+Chat::RoomList RoomFactoryImpl::getRooms(const Ice::Current& current)
 {
     return this->roomList;
 }

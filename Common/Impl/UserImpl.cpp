@@ -4,17 +4,17 @@
 
 #include "UserImpl.hpp"
 
-void UserImpl::SendMessage(const RoomPrx& where, const UserPrx& who, const ::std::string& message, const ::Ice::Current& current = ::Ice::emptyCurrent)
+void UserImpl::SendMessage(const Chat::RoomPrx& where, const Chat::UserPrx& who, const std::string& message, const Ice::Current& current)
 {
 
 }
 
-void UserImpl::SendPrivateMessage(const UserPrx& who, const ::std::string& message, const ::Ice::Current& current = ::Ice::emptyCurrent)
+void UserImpl::SendPrivateMessage(const Chat::UserPrx& who, const std::string& message, const Ice::Current& current)
 {
 
 }
 
-std::string UserImpl::getName(const ::Ice::Current& current = ::Ice::emptyCurrent)
+std::string UserImpl::getName(const Ice::Current& current)
 {
     return this->name;
 }

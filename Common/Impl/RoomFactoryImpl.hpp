@@ -10,8 +10,8 @@
 class RoomFactoryImpl : virtual public Chat::RoomFactory
 {
 public:
-    virtual RoomPrx createRoom(const ::std::string& name, const ::Ice::Current& current = ::Ice::emptyCurrent);
-    virtual RoomList getRooms(const ::Ice::Current& current = ::Ice::emptyCurrent);
+    virtual Chat::RoomPrx createRoom(const std::string& name, const Ice::Current& current = Ice::emptyCurrent);
+    virtual Chat::RoomList getRooms(const Ice::Current& current = Ice::emptyCurrent);
 private:
     Chat::RoomList roomList;
 };

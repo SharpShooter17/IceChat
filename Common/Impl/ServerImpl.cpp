@@ -3,12 +3,7 @@
 //
 #include "ServerImpl.hpp"
 
-ServerImpl::~ServerImpl()
-{
-    ::~Server();
-}
-
-RoomPrx ServerImpl::CreateRoom(const ::std::string& name, const ::Ice::Current& current = ::Ice::emptyCurrent)
+Chat::RoomPrx ServerImpl::CreateRoom(const std::string& name, const Ice::Current& current)
 {
     for (Chat::RoomPrx room : this->roomList)
     {
@@ -23,17 +18,17 @@ RoomPrx ServerImpl::CreateRoom(const ::std::string& name, const ::Ice::Current& 
     return roomPrx;
 }
 
-RoomList ServerImpl::getRooms(const ::Ice::Current& current = ::Ice::emptyCurrent)
+Chat::RoomList ServerImpl::getRooms(const Ice::Current& current)
 {
     return this->roomList;
 }
 
-RoomPrx ServerImpl::FindRoom(const ::std::string& name, const ::Ice::Current& current = ::Ice::emptyCurrent)
+Chat::RoomPrx ServerImpl::FindRoom(const std::string& name, const Ice::Current& current)
 {
     return nullptr;
 }
 
-void ServerImpl::RegisterUser(const ::std::string& name, const ::std::string& password, const ::Ice::Current& current = ::Ice::emptyCurrent)
+void ServerImpl::RegisterUser(const std::string& name, const std::string& password, const Ice::Current& current)
 {
     for (Chat::User user : this->userList)
     {
@@ -47,22 +42,22 @@ void ServerImpl::RegisterUser(const ::std::string& name, const ::std::string& pa
     this->userList.push_back(userPrx);
 }
 
-void ServerImpl::ChangePassword(const UserPrx& user, const ::std::string& oldpassword, const ::std::string& newpassword, const ::Ice::Current& current = ::Ice::emptyCurrent)
+void ServerImpl::ChangePassword(const Chat::UserPrx& user, const std::string& oldpassword, const std::string& newpassword, const Ice::Current& current)
 {
 
 }
 
-void ServerImpl::getPassword(const ::std::string& user, const ::Ice::Current& current = ::Ice::emptyCurrent)
+void ServerImpl::getPassword(const std::string& user, const Ice::Current& current)
 {
 
 }
 
-void ServerImpl::RegisterRoomFactory(const RoomFactoryPrx& factory, const ::Ice::Current& current = ::Ice::emptyCurrent)
+void ServerImpl::RegisterRoomFactory(const Chat::RoomFactoryPrx& factory, const Ice::Current& current)
 {
 
 }
 
-void ServerImpl::UnregisterRoomFactory(const RoomFactoryPrx& factory, const ::Ice::Current& current = ::Ice::emptyCurrent)
+void ServerImpl::UnregisterRoomFactory(const Chat::RoomFactoryPrx& factory, const Ice::Current& current)
 {
 
 }

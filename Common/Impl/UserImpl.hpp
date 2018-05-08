@@ -10,9 +10,9 @@
 class UserImpl : virtual public Chat::User
 {
 public:
-    virtual void SendMessage(const RoomPrx& where, const UserPrx& who, const ::std::string& message, const ::Ice::Current& current = ::Ice::emptyCurrent);
-    virtual void SendPrivateMessage(const UserPrx& who, const ::std::string& message, const ::Ice::Current& current = ::Ice::emptyCurrent);
-    virtual ::std::string getName(const ::Ice::Current& current = ::Ice::emptyCurrent);
+    virtual void SendMessage(const Chat::RoomPrx& where, const Chat::UserPrx& who, const std::string& message, const Ice::Current& current = Ice::emptyCurrent);
+    virtual void SendPrivateMessage(const Chat::UserPrx& who, const std::string& message, const Ice::Current& current = Ice::emptyCurrent);
+    virtual std::string getName(const Ice::Current& current = Ice::emptyCurrent);
 private:
     std::string name;
 };
