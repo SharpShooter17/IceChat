@@ -4,6 +4,8 @@
 
 #include "Utils.hpp"
 
+std::vector<unsigned short>  Utils::usedPorts;
+
 unsigned short Utils::getFreePort()
 {
     unsigned short port;

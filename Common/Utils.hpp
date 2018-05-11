@@ -10,11 +10,11 @@
 class Utils
 {
 private:
-    static const unsigned int SERVER_PORT = 10000;
+    static const unsigned short SERVER_PORT = 10000;
     static std::vector<unsigned short> usedPorts;
 public:
     static unsigned short getFreePort();
-    static unsigned short getServerPort();
+    static inline unsigned short getServerPort();
 };
 
 #endif //ICECHAT_UTILS_HPP
