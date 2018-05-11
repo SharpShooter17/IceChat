@@ -5,7 +5,7 @@
 #include "ServerMain.hpp"
 #include "../Common/chat.h"
 #include "../Common/Impl/ServerImpl.hpp"
-#include <iostream.h>
+#include <iostream>
 
 int ServerMain::run(int, char **)
 {

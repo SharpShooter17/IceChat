@@ -2,18 +2,30 @@
 // Created by bartek on 07.05.18.
 //
 #include "ServerImpl.hpp"
+#include "RoomFactoryImpl.hpp"
+#include "UserImpl.hpp"
+#include <iostream>
 
 Chat::RoomPrx ServerImpl::CreateRoom(const std::string& name, const Ice::Current& current)
 {
     for (Chat::RoomPrx room : this->roomList)
     {
-        if (room->getName == name){
-            throw Chat::RoomAlreadyExists;
+        if (room->getName() == name){
+            throw Chat::RoomAlreadyExists();
         }
     }
-    /**
-     * TO DO - Wrzuć gupe do RoomFactory
-     */
+
+    if (this->roomList.empty())
+    {
+        throw Chat::NoRoomsAvailable();
+    }
+
+    Chat::RoomFactoryPrx roomFactoryPrx = this->roomFactoryList.back();
+
+    std::cout << "Crating room: " << name << std::endl;
+
+    Chat::RoomPrx roomPrx = roomFactoryPrx->createRoom(name);
+    this->roomList.push_back(roomPrx);
 
     return roomPrx;
 }
@@ -25,20 +37,33 @@ Chat::RoomList ServerImpl::getRooms(const Ice::Current& current)
 
 Chat::RoomPrx ServerImpl::FindRoom(const std::string& name, const Ice::Current& current)
 {
-    return nullptr;
+    for ( Chat::RoomPrx & roomPrx : this->roomList)
+    {
+        if ( roomPrx->getName() == name )
+        {
+            return roomPrx;
+        }
+    }
+
+    throw Chat::RoomNotExists();
 }
 
 void ServerImpl::RegisterUser(const std::string& name, const std::string& password, const Ice::Current& current)
 {
-    for (Chat::User user : this->userList)
+    for (Chat::UserPrx user : this->userList)
     {
-        if (user.getName() == name)
+        if (user->getName() == name)
         {
-            throw Chat::UserAlreadyExists;
+            throw Chat::UserAlreadyExists();
         }
     }
 
-    Chat::UserPrx userPrx = new UserImpl(name);
+    Ice::Identity id;
+    id.name = name;
+
+    Chat::UserPtr newUserPtr = new UserImpl(name);
+    Chat::UserPrx userPrx = userPrx.uncheckedCast( current.adapter->add(newUserPtr, id) );
+
     this->userList.push_back(userPrx);
 }
 
@@ -54,10 +79,10 @@ void ServerImpl::getPassword(const std::string& user, const Ice::Current& curren
 
 void ServerImpl::RegisterRoomFactory(const Chat::RoomFactoryPrx& factory, const Ice::Current& current)
 {
-
+    this->roomFactoryList.push_back(factory);
 }
 
 void ServerImpl::UnregisterRoomFactory(const Chat::RoomFactoryPrx& factory, const Ice::Current& current)
 {
-
+    this->roomFactoryList.erase(factory);
 }

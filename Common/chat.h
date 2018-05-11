@@ -102,7 +102,90 @@ public:
 static UserAlreadyExists _iceS_UserAlreadyExists_init;
 /// \endcond
 
+class RoomAlreadyExists : public ::Ice::UserExceptionHelper<RoomAlreadyExists, ::Ice::UserException>
+{
+public:
+
+    virtual ~RoomAlreadyExists();
+
+    RoomAlreadyExists(const RoomAlreadyExists&) = default;
+
+    RoomAlreadyExists() = default;
+
+    /**
+     * Obtains a tuple containing all of the exception's data members.
+     * @return The data members in a tuple.
+     */
+
+    std::tuple<> ice_tuple() const
+    {
+        return std::tie();
+    }
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    static const ::std::string& ice_staticId();
+};
+
+class NoRoomsAvailable : public ::Ice::UserExceptionHelper<NoRoomsAvailable, ::Ice::UserException>
+{
+public:
+
+    virtual ~NoRoomsAvailable();
+
+    NoRoomsAvailable(const NoRoomsAvailable&) = default;
+
+    NoRoomsAvailable() = default;
+
+    /**
+     * Obtains a tuple containing all of the exception's data members.
+     * @return The data members in a tuple.
+     */
+
+    std::tuple<> ice_tuple() const
+    {
+        return std::tie();
+    }
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    static const ::std::string& ice_staticId();
+};
+
+class RoomNotExists : public ::Ice::UserExceptionHelper<RoomNotExists, ::Ice::UserException>
+{
+public:
+
+    virtual ~RoomNotExists();
+
+    RoomNotExists(const RoomNotExists&) = default;
+
+    RoomNotExists() = default;
+
+    /**
+     * Obtains a tuple containing all of the exception's data members.
+     * @return The data members in a tuple.
+     */
+
+    std::tuple<> ice_tuple() const
+    {
+        return std::tie();
+    }
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    static const ::std::string& ice_staticId();
+};
+
 using RoomList = ::std::vector<::std::shared_ptr<RoomPrx>>;
+
+using RoomFactoryList = ::std::vector<::std::shared_ptr<RoomFactoryPrx>>;
 
 using UserList = ::std::vector<::std::shared_ptr<UserPrx>>;
 
@@ -1085,7 +1168,99 @@ protected:
 static UserAlreadyExists _iceS_UserAlreadyExists_init;
 /// \endcond
 
+class RoomAlreadyExists : public ::Ice::UserException
+{
+public:
+
+    RoomAlreadyExists() {}
+    virtual ~RoomAlreadyExists() throw();
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    virtual ::std::string ice_id() const;
+    /**
+     * Polymporphically clones this exception.
+     * @return A shallow copy of this exception.
+     */
+    virtual RoomAlreadyExists* ice_clone() const;
+    /**
+     * Throws this exception.
+     */
+    virtual void ice_throw() const;
+
+protected:
+
+    /// \cond STREAM
+    virtual void _writeImpl(::Ice::OutputStream*) const;
+    virtual void _readImpl(::Ice::InputStream*);
+    /// \endcond
+};
+
+class NoRoomsAvailable : public ::Ice::UserException
+{
+public:
+
+    NoRoomsAvailable() {}
+    virtual ~NoRoomsAvailable() throw();
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    virtual ::std::string ice_id() const;
+    /**
+     * Polymporphically clones this exception.
+     * @return A shallow copy of this exception.
+     */
+    virtual NoRoomsAvailable* ice_clone() const;
+    /**
+     * Throws this exception.
+     */
+    virtual void ice_throw() const;
+
+protected:
+
+    /// \cond STREAM
+    virtual void _writeImpl(::Ice::OutputStream*) const;
+    virtual void _readImpl(::Ice::InputStream*);
+    /// \endcond
+};
+
+class RoomNotExists : public ::Ice::UserException
+{
+public:
+
+    RoomNotExists() {}
+    virtual ~RoomNotExists() throw();
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    virtual ::std::string ice_id() const;
+    /**
+     * Polymporphically clones this exception.
+     * @return A shallow copy of this exception.
+     */
+    virtual RoomNotExists* ice_clone() const;
+    /**
+     * Throws this exception.
+     */
+    virtual void ice_throw() const;
+
+protected:
+
+    /// \cond STREAM
+    virtual void _writeImpl(::Ice::OutputStream*) const;
+    virtual void _readImpl(::Ice::InputStream*);
+    /// \endcond
+};
+
 typedef ::std::vector<Chat::RoomPrx> RoomList;
+
+typedef ::std::vector<Chat::RoomFactoryPrx> RoomFactoryList;
 
 typedef ::std::vector<Chat::UserPrx> UserList;
 
@@ -2398,6 +2573,24 @@ namespace Ice
 
 template<>
 struct StreamableTraits< ::Chat::UserAlreadyExists>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryUserException;
+};
+
+template<>
+struct StreamableTraits< ::Chat::RoomAlreadyExists>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryUserException;
+};
+
+template<>
+struct StreamableTraits< ::Chat::NoRoomsAvailable>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryUserException;
+};
+
+template<>
+struct StreamableTraits< ::Chat::RoomNotExists>
 {
     static const StreamHelperCategory helper = StreamHelperCategoryUserException;
 };

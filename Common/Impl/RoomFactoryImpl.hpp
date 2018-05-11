@@ -5,6 +5,7 @@
 #ifndef ICECHAT_ROOMFACTORYIMPL_HPP
 #define ICECHAT_ROOMFACTORYIMPL_HPP
 
+#include <Ice/Ice.h>
 #include "../chat.h"
 
 class RoomFactoryImpl : virtual public Chat::RoomFactory

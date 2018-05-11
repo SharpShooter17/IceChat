@@ -4,6 +4,8 @@ module Chat {
 
     exception UserAlreadyExists {};
     exception RoomAlreadyExists {};
+    exception NoRoomsAvailable {};
+    exception RoomNotExists {};
 
     interface User {
       void SendMessage(Room* where, User* who, string message);
@@ -12,6 +14,7 @@ module Chat {
     };
 
     sequence<Room*> RoomList;
+    sequence<RoomFactory*> RoomFactoryList;
 
     interface Server {
       Room* CreateRoom(string name);

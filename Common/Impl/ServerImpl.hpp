@@ -23,7 +23,7 @@ public:
 private:
     Chat::RoomList roomList;
     Chat::UserList userList;
-    std::vector<Chat::RoomFactoryPrx> roomFactoryList;
+    Chat::RoomFactoryList roomFactoryList;
 };
 
 #endif //ICECHAT_SERVERIMPL_HPP
