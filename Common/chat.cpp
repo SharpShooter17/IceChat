@@ -18,7 +18,7 @@
 // </auto-generated>
 //
 
-#include "chat.h"
+#include <chat.h>
 #include <IceUtil/PushDisableWarnings.h>
 #include <Ice/LocalException.h>
 #include <Ice/ValueFactory.h>

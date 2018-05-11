@@ -1,7 +1,7 @@
-CC=gcc
+CC=c++
 ODIR=obj
 CFLAGS = -g -Wall -Werror -Wpedantic
-LIBSFLAGS = -std=c++11 -pthread -lIce -lIceUtil
+LIBSFLAGS = -lpthread -lIce++11 --std=c++11 -DICE_CPP11_MAPPING
 TARGETDIR = Debug/
 TARGETCLIENT = Debug/Client
 TARGETSERVER = Debug/Server
@@ -12,7 +12,7 @@ ROOMFACTORYSRC = RoomServer
 COMMONDIR = Common
 
 INCLUDES = -I $(CLIENTSRCDIR) -I $(ROOMFACTORYSRC) -I $(SERVERSRCDIR) -I $(COMMONDIR)
-SRCCOMMON = $(COMMONDIR)/chat.cpp $(COMMONDIR)/Impl/RoomFactoryImpl.cpp $(COMMONDIR)/Impl/RoomImpl.cpp $(COMMONDIR)/Impl/ServerImpl.cpp $(COMMONDIR)/Impl/UserImpl.cpp
+SRCCOMMON = $(COMMONDIR)/chat.cpp $(COMMONDIR)/Impl/RoomFactoryImpl.cpp $(COMMONDIR)/Impl/RoomImpl.cpp $(COMMONDIR)/Impl/ServerImpl.cpp $(COMMONDIR)/Impl/UserImpl.cpp $(COMMONDIR)/Utils.cpp
 SRCCLIENT = $(SRCCOMMON) $(CLIENTSRCDIR)/main.cpp $(CLIENTSRCDIR)/Client.cpp
 SRCSERVER = $(SRCCOMMON) $(CLIENTSRC)/main.cpp $(CLIENTSRC)/ServerMain.cpp
 SRCROOMFACTORY = $(SRCCOMMON) $(ROOMFACTORYSRC)/main.cpp $(ROOMFACTORYSRC)/RoomFactory.cpp

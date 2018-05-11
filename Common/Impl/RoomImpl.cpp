@@ -20,18 +20,18 @@ Chat::UserList RoomImpl::getUsers(const Ice::Current& current)
     return this->userList;
 }
 
-void RoomImpl::AddUser(const Chat::UserPrx& who, const std::string& password, const Ice::Current& current)
+void RoomImpl::AddUser(std::shared_ptr<Chat::UserPrx> who, std::string password, const Ice::Current& current)
 {
     this->userList.push_back(who);
 }
 
 /*TO DO - zabezpieczenie*/
-void RoomImpl::SendMessage(const Chat::UserPrx& who, const std::string& message, const std::string& passwd, const Ice::Current& current)
+void RoomImpl::SendMessage(std::shared_ptr<Chat::UserPrx> who, std::string message, std::string passwd, const Ice::Current& current)
 {
     std::cout << "Sending message\n";
-    for (Chat::UserPrx userPrx : this->userList)
+    for (auto userPrx : this->userList)
     {
-        userPrx->SendMessage(this, who, message);
+      //  userPrx->SendMessage(this, who, message);
     }
 }
 
@@ -41,8 +41,8 @@ void RoomImpl::Destroy(const Ice::Current& current)
     this->userList.clear();
 }
 
-void RoomImpl::LeaveRoom(const Chat::UserPrx& who, const std::string& passwd, const Ice::Current& current)
+void RoomImpl::LeaveRoom(std::shared_ptr<Chat::UserPrx> who, std::string passwd, const Ice::Current& current)
 {
     std::cout << "User leave room" << std::endl;
-    this->userList.erase(who);
+   // this->userList.erase(who);
 }

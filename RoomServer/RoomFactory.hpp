@@ -11,7 +11,7 @@
 class RoomFactory : virtual public Ice::Aplication
 {
 public:
-    virtual int run(int, char*[]);
+    virtual int run(int, char*[]) override;
 };
 
 #endif //ICECHAT_ROOMFACTORY_HPP

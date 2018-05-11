@@ -6,9 +6,9 @@
 #include "UserImpl.hpp"
 #include <iostream>
 
-Chat::RoomPrx ServerImpl::CreateRoom(const std::string& name, const Ice::Current& current)
+std::shared_ptr<Chat::RoomPrx> ServerImpl::CreateRoom(std::string name, const Ice::Current& current)
 {
-    for (Chat::RoomPrx room : this->roomList)
+    for (auto room : this->roomList)
     {
         if (room->getName() == name){
             throw Chat::RoomAlreadyExists();
@@ -20,11 +20,11 @@ Chat::RoomPrx ServerImpl::CreateRoom(const std::string& name, const Ice::Current
         throw Chat::NoRoomsAvailable();
     }
 
-    Chat::RoomFactoryPrx roomFactoryPrx = this->roomFactoryList.back();
+    auto roomFactory = this->roomFactoryList.back();
 
     std::cout << "Crating room: " << name << std::endl;
 
-    Chat::RoomPrx roomPrx = roomFactoryPrx->createRoom(name);
+    std::shared_ptr<Chat::RoomPrx> roomPrx = roomFactory->createRoom(name);
     this->roomList.push_back(roomPrx);
 
     return roomPrx;
@@ -35,9 +35,9 @@ Chat::RoomList ServerImpl::getRooms(const Ice::Current& current)
     return this->roomList;
 }
 
-Chat::RoomPrx ServerImpl::FindRoom(const std::string& name, const Ice::Current& current)
+std::shared_ptr<Chat::RoomPrx> ServerImpl::FindRoom(std::string name, const Ice::Current& current)
 {
-    for ( Chat::RoomPrx & roomPrx : this->roomList)
+    for ( auto roomPrx : this->roomList)
     {
         if ( roomPrx->getName() == name )
         {
@@ -48,9 +48,9 @@ Chat::RoomPrx ServerImpl::FindRoom(const std::string& name, const Ice::Current& 
     throw Chat::RoomNotExists();
 }
 
-void ServerImpl::RegisterUser(const std::string& name, const std::string& password, const Ice::Current& current)
+void ServerImpl::RegisterUser(std::string name, std::string password, const Ice::Current& current)
 {
-    for (Chat::UserPrx user : this->userList)
+    for (auto user : this->userList)
     {
         if (user->getName() == name)
         {
@@ -61,28 +61,28 @@ void ServerImpl::RegisterUser(const std::string& name, const std::string& passwo
     Ice::Identity id;
     id.name = name;
 
-    Chat::UserPtr newUserPtr = new UserImpl(name);
-    Chat::UserPrx userPrx = userPrx.uncheckedCast( current.adapter->add(newUserPtr, id) );
+    std::shared_ptr<Chat::User> newUserPtr = std::shared_ptr<Chat::User>(new UserImpl(name));
+    auto userPrx = Ice::uncheckedCast<Chat::UserPrx>( current.adapter->add(newUserPtr, id) );
 
     this->userList.push_back(userPrx);
 }
 
-void ServerImpl::ChangePassword(const Chat::UserPrx& user, const std::string& oldpassword, const std::string& newpassword, const Ice::Current& current)
+void ServerImpl::ChangePassword(std::shared_ptr<Chat::UserPrx> user, std::string oldpassword, std::string newpassword, const Ice::Current& current)
 {
 
 }
 
-void ServerImpl::getPassword(const std::string& user, const Ice::Current& current)
+void ServerImpl::getPassword(std::string user, const Ice::Current& current)
 {
 
 }
 
-void ServerImpl::RegisterRoomFactory(const Chat::RoomFactoryPrx& factory, const Ice::Current& current)
+void ServerImpl::RegisterRoomFactory(std::shared_ptr<Chat::RoomFactoryPrx> factory, const Ice::Current& current)
 {
     this->roomFactoryList.push_back(factory);
 }
 
-void ServerImpl::UnregisterRoomFactory(const Chat::RoomFactoryPrx& factory, const Ice::Current& current)
+void ServerImpl::UnregisterRoomFactory(std::shared_ptr<Chat::RoomFactoryPrx> factory, const Ice::Current& current)
 {
-    this->roomFactoryList.erase(factory);
+    //this->roomFactoryList.erase(factory);
 }

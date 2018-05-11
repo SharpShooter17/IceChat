@@ -4,8 +4,9 @@
 
 #include "RoomFactoryImpl.hpp"
 #include "RoomImpl.hpp"
+#include "../Utils.hpp"
 
-Chat::RoomPrx RoomFactoryImpl::createRoom(const std::string& name, const Ice::Current& current)
+std::shared_ptr<Chat::RoomPrx> RoomFactoryImpl::createRoom(std::string name, const Ice::Current& current)
 {
     Ice::Identity identity;
 
@@ -16,8 +17,8 @@ Chat::RoomPrx RoomFactoryImpl::createRoom(const std::string& name, const Ice::Cu
         throw Chat::RoomAlreadyExists();
     }
 
-    Chat::RoomPtr roomPtr = new RoomImpl(name);
-    Chat::RoomPrx roomPrx = roomPrx.uncheckedCast(current.adapter->add(roomPtr, identity));
+    Chat::RoomPtr roomPtr = std::shared_ptr<Chat::Room>( new RoomImpl(name) );
+    std::shared_ptr<Chat::RoomPrx> roomPrx = Ice::uncheckedCast<Chat::RoomPrx>( current.adapter->add(roomPtr, identity));
     this->roomList.push_back(roomPrx);
 
     std::cout << "Room - " << name << " - has been added" << std::endl;

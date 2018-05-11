@@ -8,16 +8,16 @@
 #include <Ice/Ice.h>
 #include "../chat.h"
 
-class RoomImpl : public virtual Chat::Room
+class RoomImpl : public Chat::Room
 {
 public:
     RoomImpl(std::string name);
-    virtual std::string getName(const Ice::Current& current = Ice::emptyCurrent) override ;
-    virtual Chat::UserList getUsers(const Ice::Current& current = Ice::emptyCurrent) override ;
-    virtual void AddUser(const Chat::UserPrx& who, const std::string& password, const Ice::Current& current = Ice::emptyCurrent) override ;
-    virtual void SendMessage(const Chat::UserPrx& who, const std::string& message, const std::string& passwd, const Ice::Current& current = Ice::emptyCurrent) override ;
-    virtual void Destroy(const Ice::Current& current = Ice::emptyCurrent) override ;
-    virtual void LeaveRoom(const Chat::UserPrx& who, const std::string& passwd, const Ice::Current& current = ::Ice::emptyCurrent) override ;
+    virtual std::string getName(const Ice::Current& current) override;
+    virtual Chat::UserList getUsers(const Ice::Current& current) override;
+    virtual void AddUser(std::shared_ptr<Chat::UserPrx> who, std::string password, const Ice::Current& current) override;
+    virtual void SendMessage(std::shared_ptr<Chat::UserPrx> who, std::string message, std::string passwd, const Ice::Current& current) override;
+    virtual void Destroy(const Ice::Current& current) override;
+    virtual void LeaveRoom(std::shared_ptr<Chat::UserPrx> who, std::string passwd, const Ice::Current& current) override;
 private:
     std::string name;
     Chat::UserList userList;

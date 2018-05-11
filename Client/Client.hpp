@@ -9,7 +9,8 @@
 
 class Client : virtual public Ice::Application
 {
-    void run(int argc, char* argv[]);
+public:
+    virtual int run(int argc, char* argv[]) override;
 };
 
 #endif //ICECHAT_CLIENT_HPP

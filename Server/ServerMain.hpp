@@ -10,7 +10,7 @@
 class ServerMain : virtual public Ice::Application
 {
 public:
-    virtual int run(int, char*[]);
+    virtual int run(int, char*[]) override;
 };
 
 #endif //ICECHAT_MAIN_HPP

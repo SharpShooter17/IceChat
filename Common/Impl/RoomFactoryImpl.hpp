@@ -11,8 +11,8 @@
 class RoomFactoryImpl : virtual public Chat::RoomFactory
 {
 public:
-    virtual Chat::RoomPrx createRoom(const std::string& name, const Ice::Current& current = Ice::emptyCurrent);
-    virtual Chat::RoomList getRooms(const Ice::Current& current = Ice::emptyCurrent);
+    virtual std::shared_ptr<Chat::RoomPrx> createRoom(std::string name, const Ice::Current& current) override;
+    virtual Chat::RoomList getRooms(const Ice::Current& current) override;
 private:
     Chat::RoomList roomList;
 };

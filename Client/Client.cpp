@@ -5,7 +5,7 @@
 
 #include "Client.hpp"
 
-void Client::run(int argc, char **argv)
+int Client::run(int argc, char **argv)
 {
-
+    return 0;
 }
