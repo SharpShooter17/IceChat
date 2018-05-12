@@ -14,7 +14,8 @@ private:
     static std::vector<unsigned short> usedPorts;
 public:
     static unsigned short getFreePort();
-    static inline unsigned short getServerPort();
+    static unsigned short getServerPort();
+    static unsigned short getRandomPort();
 };
 
 #endif //ICECHAT_UTILS_HPP

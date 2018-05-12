@@ -52,6 +52,10 @@
 #   endif
 #endif
 
+#ifndef ICE_CPP11_MAPPING
+    #define ICE_CPP11_MAPPING
+#endif
+
 #ifdef ICE_CPP11_MAPPING // C++11 mapping
 
 namespace Chat

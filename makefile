@@ -37,6 +37,4 @@ $(TARGETSERVER):
 	$(CC) $(CFLAGS) $(INCLUDES) -o $< -o $@
 
 clean:
-	$RM *.o *~$(TARGETCLIENT)
-	$RM *.o *~$(TARGETROOMFACTORY)
-	$RM *.o *~$(TARGETSERVER)
+	$RM -rf Debug/*
