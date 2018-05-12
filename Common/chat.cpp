@@ -61,6 +61,10 @@ const ::IceInternal::DefaultUserExceptionFactoryInit<::Chat::NoRoomsAvailable> i
 
 const ::IceInternal::DefaultUserExceptionFactoryInit<::Chat::RoomNotExists> iceC_Chat_RoomNotExists_init("::Chat::RoomNotExists");
 
+const ::IceInternal::DefaultUserExceptionFactoryInit<::Chat::UserNotExists> iceC_Chat_UserNotExists_init("::Chat::UserNotExists");
+
+const ::IceInternal::DefaultUserExceptionFactoryInit<::Chat::AuthenticationFailed> iceC_Chat_AuthenticationFailed_init("::Chat::AuthenticationFailed");
+
 const ::std::string iceC_Chat_User_ids[2] =
 {
     "::Chat::User",
@@ -194,6 +198,28 @@ const ::std::string&
 Chat::RoomNotExists::ice_staticId()
 {
     static const ::std::string typeId = "::Chat::RoomNotExists";
+    return typeId;
+}
+
+Chat::UserNotExists::~UserNotExists()
+{
+}
+
+const ::std::string&
+Chat::UserNotExists::ice_staticId()
+{
+    static const ::std::string typeId = "::Chat::UserNotExists";
+    return typeId;
+}
+
+Chat::AuthenticationFailed::~AuthenticationFailed()
+{
+}
+
+const ::std::string&
+Chat::AuthenticationFailed::ice_staticId()
+{
+    static const ::std::string typeId = "::Chat::AuthenticationFailed";
     return typeId;
 }
 
@@ -1350,6 +1376,100 @@ Chat::RoomNotExists::_readImpl(::Ice::InputStream* istr)
 {
     istr->startSlice();
     ::Ice::StreamReader< RoomNotExists, ::Ice::InputStream>::read(istr, *this);
+    istr->endSlice();
+}
+/// \endcond
+
+namespace
+{
+
+const ::IceInternal::DefaultUserExceptionFactoryInit< ::Chat::UserNotExists> iceC_Chat_UserNotExists_init("::Chat::UserNotExists");
+
+}
+
+Chat::UserNotExists::~UserNotExists() throw()
+{
+}
+
+::std::string
+Chat::UserNotExists::ice_id() const
+{
+    return "::Chat::UserNotExists";
+}
+
+Chat::UserNotExists*
+Chat::UserNotExists::ice_clone() const
+{
+    return new UserNotExists(*this);
+}
+
+void
+Chat::UserNotExists::ice_throw() const
+{
+    throw *this;
+}
+
+/// \cond STREAM
+void
+Chat::UserNotExists::_writeImpl(::Ice::OutputStream* ostr) const
+{
+    ostr->startSlice("::Chat::UserNotExists", -1, true);
+    ::Ice::StreamWriter< UserNotExists, ::Ice::OutputStream>::write(ostr, *this);
+    ostr->endSlice();
+}
+
+void
+Chat::UserNotExists::_readImpl(::Ice::InputStream* istr)
+{
+    istr->startSlice();
+    ::Ice::StreamReader< UserNotExists, ::Ice::InputStream>::read(istr, *this);
+    istr->endSlice();
+}
+/// \endcond
+
+namespace
+{
+
+const ::IceInternal::DefaultUserExceptionFactoryInit< ::Chat::AuthenticationFailed> iceC_Chat_AuthenticationFailed_init("::Chat::AuthenticationFailed");
+
+}
+
+Chat::AuthenticationFailed::~AuthenticationFailed() throw()
+{
+}
+
+::std::string
+Chat::AuthenticationFailed::ice_id() const
+{
+    return "::Chat::AuthenticationFailed";
+}
+
+Chat::AuthenticationFailed*
+Chat::AuthenticationFailed::ice_clone() const
+{
+    return new AuthenticationFailed(*this);
+}
+
+void
+Chat::AuthenticationFailed::ice_throw() const
+{
+    throw *this;
+}
+
+/// \cond STREAM
+void
+Chat::AuthenticationFailed::_writeImpl(::Ice::OutputStream* ostr) const
+{
+    ostr->startSlice("::Chat::AuthenticationFailed", -1, true);
+    ::Ice::StreamWriter< AuthenticationFailed, ::Ice::OutputStream>::write(ostr, *this);
+    ostr->endSlice();
+}
+
+void
+Chat::AuthenticationFailed::_readImpl(::Ice::InputStream* istr)
+{
+    istr->startSlice();
+    ::Ice::StreamReader< AuthenticationFailed, ::Ice::InputStream>::read(istr, *this);
     istr->endSlice();
 }
 /// \endcond

@@ -11,8 +11,7 @@
 class Client : virtual public Ice::Application
 {
 public:
-    Client(std::string username);
-    ~Client();
+    virtual ~Client();
 
     virtual int run(int argc, char* argv[]) override;
 
@@ -25,13 +24,20 @@ public:
     void sendMessageToRoom(std::string message);
     void setPassword(std::string password);
 
+    void setFunction(void (*fun)(Client&));
+
 private:
+    void initialize(std::string username);
+
     std::shared_ptr<Chat::RoomPrx> roomPrx;
     std::string username;
     std::string password;
     std::shared_ptr<Chat::ServerPrx> serverPrx;
     std::shared_ptr<Chat::UserPrx> userPrx;
     std::shared_ptr<Ice::ObjectAdapter> adapter;
+
+    void (*fun)(Client&);
+
 };
 
 #endif //ICECHAT_CLIENT_HPP

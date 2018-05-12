@@ -6,6 +6,8 @@ module Chat {
     exception RoomAlreadyExists {};
     exception NoRoomsAvailable {};
     exception RoomNotExists {};
+    exception UserNotExists {};
+    exception AuthenticationFailed {};
 
     interface User {
       void SendMessage(Room* where, User* who, string message);

@@ -6,6 +6,5 @@
 int main(int argc, char *argv[])
 {
     RoomFactory roomFactory;
-    roomFactory.run(argc, argv);
-    return 0;
+    return roomFactory.main(argc, argv);
 }

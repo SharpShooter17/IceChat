@@ -12,7 +12,7 @@ int RoomFactory::run(int argc, char * argv[])
 {
     std::cout << "Room server starting.. \n";
 
-    std::shared_ptr<Ice::ObjectPrx> proxy = communicator()->stringToProxy("Server:default -p " + std::to_string(Utils::getServerPort()));
+    std::shared_ptr<Ice::ObjectPrx> proxy = communicator()->stringToProxy("MainServer:default -p " + std::to_string(Utils::getServerPort()));
     std::shared_ptr<Chat::ServerPrx> serverPrx = Ice::uncheckedCast<Chat::ServerPrx>(proxy);
 
     if (serverPrx == nullptr)

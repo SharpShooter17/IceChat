@@ -7,6 +7,7 @@
 
 #include <Ice/Ice.h>
 #include "../chat.h"
+#include <map>
 
 class ServerImpl : public virtual Chat::Server
 {
@@ -20,10 +21,15 @@ public:
     virtual void RegisterRoomFactory(std::shared_ptr<Chat::RoomFactoryPrx> factory, const Ice::Current& current) override;
     virtual void UnregisterRoomFactory(std::shared_ptr<Chat::RoomFactoryPrx> factory, const Ice::Current& current) override;
 
+    bool authorize(std::string username, std::string password);
+
 private:
     Chat::RoomList roomList;
     Chat::UserList userList;
     Chat::RoomFactoryList roomFactoryList;
+
+    std::map<std::string, std::string> registeredUsers;
+
 };
 
 #endif //ICECHAT_SERVERIMPL_HPP

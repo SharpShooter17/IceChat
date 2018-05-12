@@ -52,10 +52,6 @@
 #   endif
 #endif
 
-#ifndef ICE_CPP11_MAPPING
-    #define ICE_CPP11_MAPPING
-#endif
-
 #ifdef ICE_CPP11_MAPPING // C++11 mapping
 
 namespace Chat
@@ -169,6 +165,60 @@ public:
     RoomNotExists(const RoomNotExists&) = default;
 
     RoomNotExists() = default;
+
+    /**
+     * Obtains a tuple containing all of the exception's data members.
+     * @return The data members in a tuple.
+     */
+
+    std::tuple<> ice_tuple() const
+    {
+        return std::tie();
+    }
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    static const ::std::string& ice_staticId();
+};
+
+class UserNotExists : public ::Ice::UserExceptionHelper<UserNotExists, ::Ice::UserException>
+{
+public:
+
+    virtual ~UserNotExists();
+
+    UserNotExists(const UserNotExists&) = default;
+
+    UserNotExists() = default;
+
+    /**
+     * Obtains a tuple containing all of the exception's data members.
+     * @return The data members in a tuple.
+     */
+
+    std::tuple<> ice_tuple() const
+    {
+        return std::tie();
+    }
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    static const ::std::string& ice_staticId();
+};
+
+class AuthenticationFailed : public ::Ice::UserExceptionHelper<AuthenticationFailed, ::Ice::UserException>
+{
+public:
+
+    virtual ~AuthenticationFailed();
+
+    AuthenticationFailed(const AuthenticationFailed&) = default;
+
+    AuthenticationFailed() = default;
 
     /**
      * Obtains a tuple containing all of the exception's data members.
@@ -1249,6 +1299,66 @@ public:
      * @return A shallow copy of this exception.
      */
     virtual RoomNotExists* ice_clone() const;
+    /**
+     * Throws this exception.
+     */
+    virtual void ice_throw() const;
+
+protected:
+
+    /// \cond STREAM
+    virtual void _writeImpl(::Ice::OutputStream*) const;
+    virtual void _readImpl(::Ice::InputStream*);
+    /// \endcond
+};
+
+class UserNotExists : public ::Ice::UserException
+{
+public:
+
+    UserNotExists() {}
+    virtual ~UserNotExists() throw();
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    virtual ::std::string ice_id() const;
+    /**
+     * Polymporphically clones this exception.
+     * @return A shallow copy of this exception.
+     */
+    virtual UserNotExists* ice_clone() const;
+    /**
+     * Throws this exception.
+     */
+    virtual void ice_throw() const;
+
+protected:
+
+    /// \cond STREAM
+    virtual void _writeImpl(::Ice::OutputStream*) const;
+    virtual void _readImpl(::Ice::InputStream*);
+    /// \endcond
+};
+
+class AuthenticationFailed : public ::Ice::UserException
+{
+public:
+
+    AuthenticationFailed() {}
+    virtual ~AuthenticationFailed() throw();
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    virtual ::std::string ice_id() const;
+    /**
+     * Polymporphically clones this exception.
+     * @return A shallow copy of this exception.
+     */
+    virtual AuthenticationFailed* ice_clone() const;
     /**
      * Throws this exception.
      */
@@ -2595,6 +2705,18 @@ struct StreamableTraits< ::Chat::NoRoomsAvailable>
 
 template<>
 struct StreamableTraits< ::Chat::RoomNotExists>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryUserException;
+};
+
+template<>
+struct StreamableTraits< ::Chat::UserNotExists>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryUserException;
+};
+
+template<>
+struct StreamableTraits< ::Chat::AuthenticationFailed>
 {
     static const StreamHelperCategory helper = StreamHelperCategoryUserException;
 };

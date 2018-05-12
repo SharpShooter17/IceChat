@@ -17,6 +17,7 @@ public:
     virtual std::string getName(const Ice::Current& current) override;
 private:
     std::string name;
+    std::string password;
 };
 
 #endif //ICECHAT_USERIMPL_HPP

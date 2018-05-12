@@ -3,15 +3,34 @@
 //
 #include "Client.hpp"
 
-int main(int argc, char* argv[])
+void test(Client & client)
 {
-    if (argc != 2)
+    std::cout << "Start test" << std::endl;
+
+    client
+
+    client.createRoom("FirstRoom");
+    client.createRoom("SecondRoom");
+
+    std::cout << "Available rooms: " << std::endl;
+    for (auto & roomPrx : client.getRoomList())
     {
-        std::cerr << "Client [username]" << std::endl;
-        return -1;
+        std::cout << roomPrx->getName() << std::endl;
     }
 
-    Client client(std::string(argv[1]));
+    client.joinToRoom("FirstRoom");
 
-    return 0;
+    client.sendMessageToRoom("Hello, how are you?");
+
+    client.leaveRoom();
+
+    std::cout << "End test" << std::endl;
+}
+
+int main(int argc, char* argv[])
+{
+    Client client;
+    client.setFunction(test);
+
+    return client.main(argc, argv);
 }
