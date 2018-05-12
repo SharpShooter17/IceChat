@@ -5,13 +5,12 @@
 #ifndef ICECHAT_ROOMFACTORY_HPP
 #define ICECHAT_ROOMFACTORY_HPP
 
-#include "../Common/chat.h"
-#include "../Common/Impl/RoomFactoryImpl.hpp"
+#include <Ice/Ice.h>
 
-class RoomFactory : virtual public Ice::Aplication
+class RoomFactory : virtual public Ice::Application
 {
 public:
-    virtual int run(int, char*[]) override;
+    virtual int run(int argc, char* argv[]) override;
 };
 
 #endif //ICECHAT_ROOMFACTORY_HPP
