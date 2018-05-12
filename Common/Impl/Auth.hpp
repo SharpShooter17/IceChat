@@ -6,6 +6,7 @@
 #define ICECHAT_AUTH_HPP
 
 #include "../chat.h"
+#include <map>
 
 class Auth
 {

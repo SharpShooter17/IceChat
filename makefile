@@ -1,7 +1,7 @@
 CC=g++
 ODIR=obj
 CFLAGS = -g -Wall -Wpedantic
-LIBSFLAGS = -lpthread -lIce++11 --std=c++11 -DICE_CPP11_MAPPING
+LIBSFLAGS = -lpthread -lIce++11 -std=c++11 -DICE_CPP11_MAPPING
 TARGETDIR = Debug/
 TARGETCLIENT = Debug/Client
 TARGETSERVER = Debug/Server

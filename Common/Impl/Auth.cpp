@@ -4,11 +4,13 @@
 
 #include "Auth.hpp"
 
+std::map<std::string, std::string> Auth::registeredUsers;
+
 bool Auth::auth(std::string name, std::string password)
 {
-    auto & user = this->registeredUsers.find(user->getName());
+    auto user = Auth::registeredUsers.find(name);
 
-    if (user == this->registeredUsers.end() || user.second != password )
+    if (user == Auth::registeredUsers.end() || user->second != password )
     {
         return false;
     }
@@ -23,9 +25,9 @@ void Auth::changePassword(std::string name, std::string oldpassword, std::string
         throw Chat::AuthenticationFailed();
     }
 
-    auto & user = this->registeredUsers.find(user->getName());
+    auto user = Auth::registeredUsers.find(name);
 
-    user.second = newpassword;
+    user->second = password;
 }
 
 void Auth::registerUser(std::string name, std::string password)
