@@ -5,6 +5,8 @@
 #include "RoomFactoryImpl.hpp"
 #include "UserImpl.hpp"
 #include <iostream>
+#include "Auth.hpp"
+
 
 std::shared_ptr<Chat::RoomPrx> ServerImpl::CreateRoom(std::string name, const Ice::Current& current)
 {
@@ -51,38 +53,22 @@ std::shared_ptr<Chat::RoomPrx> ServerImpl::FindRoom(std::string name, const Ice:
 
 void ServerImpl::RegisterUser(std::string name, std::string password, const Ice::Current& current)
 {
-    for (auto user : this->userList)
-    {
-        if (user->getName() == name)
-        {
-            throw Chat::UserAlreadyExists();
-        }
-    }
+    Auth::registerUser(name, password);
 
     Ice::Identity id;
-    id.name = name;
+    id.name = "User_" + name;
 
     std::shared_ptr<Chat::User> newUserPtr = std::shared_ptr<Chat::User>(new UserImpl(name));
     auto userPrx = Ice::uncheckedCast<Chat::UserPrx>( current.adapter->add(newUserPtr, id) );
 
     this->userList.push_back(userPrx);
 
-    this->registeredUsers.insert(std::pair<std::string, std::string>(username, password));
-
     std::cout << "User: " << name << " has been registered" << std::endl;
 }
 
 void ServerImpl::ChangePassword(std::shared_ptr<Chat::UserPrx> user, std::string oldpassword, std::string newpassword, const Ice::Current& current)
 {
-    if ( this->authorize(user->getName(), oldpassword) )
-    {
-        throw Chat::AuthenticationFailed();
-    }
-
-    auto & user = this->registeredUsers.find(user->getName());
-
-    user.second = newpassword;
-
+    Auth::changePassword(user->getName(), oldpassword, newpassword);
     std::cout << "Password has been changed" << std::endl;
 }
 
@@ -102,14 +88,7 @@ void ServerImpl::UnregisterRoomFactory(std::shared_ptr<Chat::RoomFactoryPrx> fac
     //this->roomFactoryList.erase(factory);
 }
 
-bool ServerImpl::authorize(std::string username, std::string password)
+bool ServerImpl::auth(std::string username, std::string password)
 {
-    auto & user = this->registeredUsers.find(user->getName());
-
-    if (user == this->registeredUsers.end() || user.second != password )
-    {
-        return false;
-    }
-
-    return true;
+    return Auth::auth(username, password);
 }

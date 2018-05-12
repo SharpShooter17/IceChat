@@ -7,7 +7,7 @@ void test(Client & client)
 {
     std::cout << "Start test" << std::endl;
 
-    client
+    client.changePassword(std::string("password"));
 
     client.createRoom("FirstRoom");
     client.createRoom("SecondRoom");

@@ -27,7 +27,7 @@ public:
     void setFunction(void (*fun)(Client&));
 
 private:
-    void initialize(std::string username);
+    void initialize(std::string username, std::string password);
 
     std::shared_ptr<Chat::RoomPrx> roomPrx;
     std::string username;

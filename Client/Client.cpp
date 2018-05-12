@@ -7,35 +7,37 @@
 #include "../Common/Impl/UserImpl.hpp"
 #include "NoPasswordException.hpp"
 
-void Client::initialize(std::string username)
+void Client::initialize(std::string username, std::string password)
 {
     std::cout << "Client initialization" << std::endl;
 
     this->username = username;
-
-    if ( this->password == "" )
-    {
-        throw NoPasswordException();
-    }
-
+    this->setPassword(password);
 
     std::shared_ptr<Ice::ObjectPrx> object = communicator()->stringToProxy("MainServer:default -p " + std::to_string(Utils::getServerPort()));
     this->serverPrx = Ice::checkedCast<Chat::ServerPrx>(object);
 
-    this->adapter = communicator()->createObjectAdapterWithEndpoints("User" +  this->username, "default -p " + std::to_string(Utils::getRandomPort()));
+    this->adapter = communicator()->createObjectAdapterWithEndpoints("User_" + this->username, "default -p " + std::to_string(Utils::getRandomPort()));
 
     Chat::UserPtr userPtr = std::shared_ptr<Chat::User>(new UserImpl(this->username));
     this->userPrx = Ice::uncheckedCast<Chat::UserPrx>( adapter->addWithUUID(userPtr));
     this->adapter->activate();
 
-    this->serverPrx->RegisterUser(this->username, this->password);
+    try
+    {
+        this->serverPrx->RegisterUser(this->username, this->password);
+    }
+    catch (Chat::UserNotExists & ex)
+    {
+        std::cerr << "User already exists exception" << std::endl;
+    }
 
     std::cout << "Hello, " << this->username << std::endl;
 }
 
 void Client::changePassword(std::string password)
 {
-    //this->roomPrx->ChangePassword(this->username, this->password, password);
+    this->serverPrx->ChangePassword(this->userPrx, this->password, password);
     this->setPassword(password);
 }
 
@@ -83,13 +85,13 @@ void Client::setPassword(std::string password)
 
 int Client::run(int argc, char* argv[])
 {
-    if (argc != 2)
+    if (argc != 3)
     {
-        std::cerr << "Client [username]" << std::endl;
+        std::cerr << "Client [username] [password]" << std::endl;
         return -1;
     }
 
-    this->initialize(argv[1]);
+    this->initialize(argv[1], argv[2]);
 
     this->fun(*this);
 
