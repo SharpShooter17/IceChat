@@ -6,18 +6,26 @@
 #include "RoomImpl.hpp"
 #include "../Utils.hpp"
 
+RoomFactoryImpl::RoomFactoryImpl(std::shared_ptr <Chat::ServerPrx> serverPrx) :
+    serverPrx(serverPrx)
+{
+
+}
+
 std::shared_ptr<Chat::RoomPrx> RoomFactoryImpl::createRoom(std::string name, const Ice::Current& current)
 {
+    std::cout << "Creating room: " << name << std::endl;
+
     Ice::Identity identity;
 
     identity.name = name;
 
-    if (!current.adapter->find(identity))
+    if ( current.adapter->find(identity) != nullptr )
     {
         throw Chat::RoomAlreadyExists();
     }
 
-    Chat::RoomPtr roomPtr = std::shared_ptr<Chat::Room>( new RoomImpl(name) );
+    Chat::RoomPtr roomPtr = std::shared_ptr<Chat::Room>( new RoomImpl(name, this->serverPrx) );
     std::shared_ptr<Chat::RoomPrx> roomPrx = Ice::uncheckedCast<Chat::RoomPrx>( current.adapter->add(roomPtr, identity));
     this->roomList.push_back(roomPrx);
 

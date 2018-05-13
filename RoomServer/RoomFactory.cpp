@@ -21,7 +21,7 @@ int RoomFactory::run(int argc, char * argv[])
     }
 
     Ice::ObjectAdapterPtr adapterPtr = communicator()->createObjectAdapterWithEndpoints("RoomFactoryServer", "default -p " + std::to_string(Utils::getRandomPort()));
-    Chat::RoomFactoryPtr roomFactoryPtr =  std::shared_ptr<Chat::RoomFactory>(new RoomFactoryImpl());
+    Chat::RoomFactoryPtr roomFactoryPtr =  std::shared_ptr<Chat::RoomFactory>(new RoomFactoryImpl( serverPrx ));
     std::shared_ptr<Chat::RoomFactoryPrx> roomFactoryPrx = Ice::uncheckedCast<Chat::RoomFactoryPrx>(adapterPtr->addWithUUID(roomFactoryPtr));
     adapterPtr->add(roomFactoryPtr, communicator()->stringToIdentity("RoomFactorServer"));
     adapterPtr->activate();

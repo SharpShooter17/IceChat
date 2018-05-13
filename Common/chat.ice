@@ -5,6 +5,7 @@ module Chat {
     exception UserAlreadyExists {};
     exception RoomAlreadyExists {};
     exception NoRoomsAvailable {};
+    exception NoRoomFactoryAvailable {};
     exception RoomNotExists {};
     exception UserNotExists {};
     exception AuthenticationFailed {};
@@ -27,6 +28,7 @@ module Chat {
       void getPassword(string user);
       void RegisterRoomFactory(RoomFactory* factory);
       void UnregisterRoomFactory(RoomFactory* factory);
+      bool auth(string name, string password);
     };
 
     sequence<User*> UserList;

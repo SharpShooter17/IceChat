@@ -15,7 +15,7 @@ void test(Client & client)
     std::cout << "Available rooms: " << std::endl;
     for (auto & roomPrx : client.getRoomList())
     {
-        std::cout << roomPrx->getName() << std::endl;
+        std::cout << '\t' << roomPrx->getName() << std::endl;
     }
 
     client.joinToRoom("FirstRoom");

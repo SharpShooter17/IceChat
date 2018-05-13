@@ -59,6 +59,8 @@ const ::IceInternal::DefaultUserExceptionFactoryInit<::Chat::RoomAlreadyExists> 
 
 const ::IceInternal::DefaultUserExceptionFactoryInit<::Chat::NoRoomsAvailable> iceC_Chat_NoRoomsAvailable_init("::Chat::NoRoomsAvailable");
 
+const ::IceInternal::DefaultUserExceptionFactoryInit<::Chat::NoRoomFactoryAvailable> iceC_Chat_NoRoomFactoryAvailable_init("::Chat::NoRoomFactoryAvailable");
+
 const ::IceInternal::DefaultUserExceptionFactoryInit<::Chat::RoomNotExists> iceC_Chat_RoomNotExists_init("::Chat::RoomNotExists");
 
 const ::IceInternal::DefaultUserExceptionFactoryInit<::Chat::UserNotExists> iceC_Chat_UserNotExists_init("::Chat::UserNotExists");
@@ -97,6 +99,7 @@ const ::std::string iceC_Chat_Server_ops[] =
     "RegisterRoomFactory",
     "RegisterUser",
     "UnregisterRoomFactory",
+    "auth",
     "getPassword",
     "getRooms",
     "ice_id",
@@ -112,6 +115,7 @@ const ::std::string iceC_Chat_Server_ChangePassword_name = "ChangePassword";
 const ::std::string iceC_Chat_Server_getPassword_name = "getPassword";
 const ::std::string iceC_Chat_Server_RegisterRoomFactory_name = "RegisterRoomFactory";
 const ::std::string iceC_Chat_Server_UnregisterRoomFactory_name = "UnregisterRoomFactory";
+const ::std::string iceC_Chat_Server_auth_name = "auth";
 
 const ::std::string iceC_Chat_Room_ids[2] =
 {
@@ -187,6 +191,17 @@ const ::std::string&
 Chat::NoRoomsAvailable::ice_staticId()
 {
     static const ::std::string typeId = "::Chat::NoRoomsAvailable";
+    return typeId;
+}
+
+Chat::NoRoomFactoryAvailable::~NoRoomFactoryAvailable()
+{
+}
+
+const ::std::string&
+Chat::NoRoomFactoryAvailable::ice_staticId()
+{
+    static const ::std::string typeId = "::Chat::NoRoomFactoryAvailable";
     return typeId;
 }
 
@@ -497,9 +512,27 @@ Chat::Server::_iceD_UnregisterRoomFactory(::IceInternal::Incoming& inS, const ::
 
 /// \cond INTERNAL
 bool
+Chat::Server::_iceD_auth(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
+    auto istr = inS.startReadParams();
+    ::std::string iceP_name;
+    ::std::string iceP_password;
+    istr->readAll(iceP_name, iceP_password);
+    inS.endReadParams();
+    bool ret = this->auth(::std::move(iceP_name), ::std::move(iceP_password), current);
+    auto ostr = inS.startWriteParams();
+    ostr->writeAll(ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
+/// \cond INTERNAL
+bool
 Chat::Server::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_Chat_Server_ops, iceC_Chat_Server_ops + 12, current.operation);
+    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_Chat_Server_ops, iceC_Chat_Server_ops + 13, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -533,25 +566,29 @@ Chat::Server::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& cu
         }
         case 6:
         {
-            return _iceD_getPassword(in, current);
+            return _iceD_auth(in, current);
         }
         case 7:
         {
-            return _iceD_getRooms(in, current);
+            return _iceD_getPassword(in, current);
         }
         case 8:
         {
-            return _iceD_ice_id(in, current);
+            return _iceD_getRooms(in, current);
         }
         case 9:
         {
-            return _iceD_ice_ids(in, current);
+            return _iceD_ice_id(in, current);
         }
         case 10:
         {
-            return _iceD_ice_isA(in, current);
+            return _iceD_ice_ids(in, current);
         }
         case 11:
+        {
+            return _iceD_ice_isA(in, current);
+        }
+        case 12:
         {
             return _iceD_ice_ping(in, current);
         }
@@ -1010,6 +1047,20 @@ Chat::ServerPrx::_iceI_UnregisterRoomFactory(const ::std::shared_ptr<::IceIntern
 /// \endcond
 
 /// \cond INTERNAL
+void
+Chat::ServerPrx::_iceI_auth(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<bool>>& outAsync, const ::std::string& iceP_name, const ::std::string& iceP_password, const ::Ice::Context& context)
+{
+    _checkTwowayOnly(iceC_Chat_Server_auth_name);
+    outAsync->invoke(iceC_Chat_Server_auth_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
+        [&](::Ice::OutputStream* ostr)
+        {
+            ostr->writeAll(iceP_name, iceP_password);
+        },
+        nullptr);
+}
+/// \endcond
+
+/// \cond INTERNAL
 ::std::shared_ptr<::Ice::ObjectPrx>
 Chat::ServerPrx::_newInstance() const
 {
@@ -1174,6 +1225,8 @@ const ::std::string iceC_Chat_Server_RegisterRoomFactory_name = "RegisterRoomFac
 
 const ::std::string iceC_Chat_Server_UnregisterRoomFactory_name = "UnregisterRoomFactory";
 
+const ::std::string iceC_Chat_Server_auth_name = "auth";
+
 const ::std::string iceC_Chat_Room_getName_name = "getName";
 
 const ::std::string iceC_Chat_Room_getUsers_name = "getUsers";
@@ -1329,6 +1382,53 @@ Chat::NoRoomsAvailable::_readImpl(::Ice::InputStream* istr)
 {
     istr->startSlice();
     ::Ice::StreamReader< NoRoomsAvailable, ::Ice::InputStream>::read(istr, *this);
+    istr->endSlice();
+}
+/// \endcond
+
+namespace
+{
+
+const ::IceInternal::DefaultUserExceptionFactoryInit< ::Chat::NoRoomFactoryAvailable> iceC_Chat_NoRoomFactoryAvailable_init("::Chat::NoRoomFactoryAvailable");
+
+}
+
+Chat::NoRoomFactoryAvailable::~NoRoomFactoryAvailable() throw()
+{
+}
+
+::std::string
+Chat::NoRoomFactoryAvailable::ice_id() const
+{
+    return "::Chat::NoRoomFactoryAvailable";
+}
+
+Chat::NoRoomFactoryAvailable*
+Chat::NoRoomFactoryAvailable::ice_clone() const
+{
+    return new NoRoomFactoryAvailable(*this);
+}
+
+void
+Chat::NoRoomFactoryAvailable::ice_throw() const
+{
+    throw *this;
+}
+
+/// \cond STREAM
+void
+Chat::NoRoomFactoryAvailable::_writeImpl(::Ice::OutputStream* ostr) const
+{
+    ostr->startSlice("::Chat::NoRoomFactoryAvailable", -1, true);
+    ::Ice::StreamWriter< NoRoomFactoryAvailable, ::Ice::OutputStream>::write(ostr, *this);
+    ostr->endSlice();
+}
+
+void
+Chat::NoRoomFactoryAvailable::_readImpl(::Ice::InputStream* istr)
+{
+    istr->startSlice();
+    ::Ice::StreamReader< NoRoomFactoryAvailable, ::Ice::InputStream>::read(istr, *this);
     istr->endSlice();
 }
 /// \endcond
@@ -1888,6 +1988,49 @@ void
 IceProxy::Chat::Server::end_UnregisterRoomFactory(const ::Ice::AsyncResultPtr& result)
 {
     _end(result, iceC_Chat_Server_UnregisterRoomFactory_name);
+}
+
+::Ice::AsyncResultPtr
+IceProxy::Chat::Server::_iceI_begin_auth(const ::std::string& iceP_name, const ::std::string& iceP_password, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+{
+    _checkTwowayOnly(iceC_Chat_Server_auth_name, sync);
+    ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_Chat_Server_auth_name, del, cookie, sync);
+    try
+    {
+        result->prepare(iceC_Chat_Server_auth_name, ::Ice::Normal, context);
+        ::Ice::OutputStream* ostr = result->startWriteParams(::Ice::DefaultFormat);
+        ostr->write(iceP_name);
+        ostr->write(iceP_password);
+        result->endWriteParams();
+        result->invoke(iceC_Chat_Server_auth_name);
+    }
+    catch(const ::Ice::Exception& ex)
+    {
+        result->abort(ex);
+    }
+    return result;
+}
+
+bool
+IceProxy::Chat::Server::end_auth(const ::Ice::AsyncResultPtr& result)
+{
+    ::Ice::AsyncResult::_check(result, this, iceC_Chat_Server_auth_name);
+    bool ret;
+    if(!result->_waitForResponse())
+    {
+        try
+        {
+            result->_throwUserException();
+        }
+        catch(const ::Ice::UserException& ex)
+        {
+            throw ::Ice::UnknownUserException(__FILE__, __LINE__, ex.ice_id());
+        }
+    }
+    ::Ice::InputStream* istr = result->_startReadParams();
+    istr->read(ret);
+    result->_endReadParams();
+    return ret;
 }
 
 /// \cond INTERNAL
@@ -2605,6 +2748,25 @@ Chat::Server::_iceD_UnregisterRoomFactory(::IceInternal::Incoming& inS, const ::
 }
 /// \endcond
 
+/// \cond INTERNAL
+bool
+Chat::Server::_iceD_auth(::IceInternal::Incoming& inS, const ::Ice::Current& current)
+{
+    _iceCheckMode(::Ice::Normal, current.mode);
+    ::Ice::InputStream* istr = inS.startReadParams();
+    ::std::string iceP_name;
+    ::std::string iceP_password;
+    istr->read(iceP_name);
+    istr->read(iceP_password);
+    inS.endReadParams();
+    bool ret = this->auth(iceP_name, iceP_password, current);
+    ::Ice::OutputStream* ostr = inS.startWriteParams();
+    ostr->write(ret);
+    inS.endWriteParams();
+    return true;
+}
+/// \endcond
+
 namespace
 {
 const ::std::string iceC_Chat_Server_all[] =
@@ -2615,6 +2777,7 @@ const ::std::string iceC_Chat_Server_all[] =
     "RegisterRoomFactory",
     "RegisterUser",
     "UnregisterRoomFactory",
+    "auth",
     "getPassword",
     "getRooms",
     "ice_id",
@@ -2629,7 +2792,7 @@ const ::std::string iceC_Chat_Server_all[] =
 bool
 Chat::Server::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_Chat_Server_all, iceC_Chat_Server_all + 12, current.operation);
+    ::std::pair<const ::std::string*, const ::std::string*> r = ::std::equal_range(iceC_Chat_Server_all, iceC_Chat_Server_all + 13, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -2663,25 +2826,29 @@ Chat::Server::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Current& cu
         }
         case 6:
         {
-            return _iceD_getPassword(in, current);
+            return _iceD_auth(in, current);
         }
         case 7:
         {
-            return _iceD_getRooms(in, current);
+            return _iceD_getPassword(in, current);
         }
         case 8:
         {
-            return _iceD_ice_id(in, current);
+            return _iceD_getRooms(in, current);
         }
         case 9:
         {
-            return _iceD_ice_ids(in, current);
+            return _iceD_ice_id(in, current);
         }
         case 10:
         {
-            return _iceD_ice_isA(in, current);
+            return _iceD_ice_ids(in, current);
         }
         case 11:
+        {
+            return _iceD_ice_isA(in, current);
+        }
+        case 12:
         {
             return _iceD_ice_ping(in, current);
         }

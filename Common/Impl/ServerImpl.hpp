@@ -21,12 +21,13 @@ public:
     virtual void RegisterRoomFactory(std::shared_ptr<Chat::RoomFactoryPrx> factory, const Ice::Current& current) override;
     virtual void UnregisterRoomFactory(std::shared_ptr<Chat::RoomFactoryPrx> factory, const Ice::Current& current) override;
 
-    bool auth(std::string username, std::string password);
-
+    virtual bool auth(std::string name, std::string password, const Ice::Current& current) override;
 private:
     Chat::RoomList roomList;
     Chat::UserList userList;
     Chat::RoomFactoryList roomFactoryList;
+
+    std::map<std::string, std::string> registeredUsers;
 };
 
 #endif //ICECHAT_SERVERIMPL_HPP

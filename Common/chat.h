@@ -156,6 +156,33 @@ public:
     static const ::std::string& ice_staticId();
 };
 
+class NoRoomFactoryAvailable : public ::Ice::UserExceptionHelper<NoRoomFactoryAvailable, ::Ice::UserException>
+{
+public:
+
+    virtual ~NoRoomFactoryAvailable();
+
+    NoRoomFactoryAvailable(const NoRoomFactoryAvailable&) = default;
+
+    NoRoomFactoryAvailable() = default;
+
+    /**
+     * Obtains a tuple containing all of the exception's data members.
+     * @return The data members in a tuple.
+     */
+
+    std::tuple<> ice_tuple() const
+    {
+        return std::tie();
+    }
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    static const ::std::string& ice_staticId();
+};
+
 class RoomNotExists : public ::Ice::UserExceptionHelper<RoomNotExists, ::Ice::UserException>
 {
 public:
@@ -374,6 +401,11 @@ public:
     virtual void UnregisterRoomFactory(::std::shared_ptr<RoomFactoryPrx> factory, const ::Ice::Current& current) = 0;
     /// \cond INTERNAL
     bool _iceD_UnregisterRoomFactory(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
+    virtual bool auth(::std::string name, ::std::string password, const ::Ice::Current& current) = 0;
+    /// \cond INTERNAL
+    bool _iceD_auth(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
     /// \cond INTERNAL
@@ -810,6 +842,32 @@ public:
 
     /// \cond INTERNAL
     void _iceI_UnregisterRoomFactory(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::shared_ptr<RoomFactoryPrx>&, const ::Ice::Context&);
+    /// \endcond
+
+    bool auth(const ::std::string& name, const ::std::string& password, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makePromiseOutgoing<bool>(true, this, &ServerPrx::_iceI_auth, name, password, context).get();
+    }
+
+    template<template<typename> class P = ::std::promise>
+    auto authAsync(const ::std::string& name, const ::std::string& password, const ::Ice::Context& context = ::Ice::noExplicitContext)
+        -> decltype(::std::declval<P<bool>>().get_future())
+    {
+        return _makePromiseOutgoing<bool, P>(false, this, &ServerPrx::_iceI_auth, name, password, context);
+    }
+
+    ::std::function<void()>
+    authAsync(const ::std::string& name, const ::std::string& password,
+              ::std::function<void(bool)> response,
+              ::std::function<void(::std::exception_ptr)> ex = nullptr,
+              ::std::function<void(bool)> sent = nullptr,
+              const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _makeLamdaOutgoing<bool>(response, ex, sent, this, &ServerPrx::_iceI_auth, name, password, context);
+    }
+
+    /// \cond INTERNAL
+    void _iceI_auth(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<bool>>&, const ::std::string&, const ::std::string&, const ::Ice::Context&);
     /// \endcond
 
     /**
@@ -1282,6 +1340,36 @@ protected:
     /// \endcond
 };
 
+class NoRoomFactoryAvailable : public ::Ice::UserException
+{
+public:
+
+    NoRoomFactoryAvailable() {}
+    virtual ~NoRoomFactoryAvailable() throw();
+
+    /**
+     * Obtains the Slice type ID of this exception.
+     * @return The fully-scoped type ID.
+     */
+    virtual ::std::string ice_id() const;
+    /**
+     * Polymporphically clones this exception.
+     * @return A shallow copy of this exception.
+     */
+    virtual NoRoomFactoryAvailable* ice_clone() const;
+    /**
+     * Throws this exception.
+     */
+    virtual void ice_throw() const;
+
+protected:
+
+    /// \cond STREAM
+    virtual void _writeImpl(::Ice::OutputStream*) const;
+    virtual void _readImpl(::Ice::InputStream*);
+    /// \endcond
+};
+
 class RoomNotExists : public ::Ice::UserException
 {
 public:
@@ -1470,6 +1558,14 @@ typedef ::IceUtil::Handle< Callback_Server_RegisterRoomFactory_Base> Callback_Se
  */
 class Callback_Server_UnregisterRoomFactory_Base : public virtual ::IceInternal::CallbackBase { };
 typedef ::IceUtil::Handle< Callback_Server_UnregisterRoomFactory_Base> Callback_Server_UnregisterRoomFactoryPtr;
+
+/**
+ * Base class for asynchronous callback wrapper classes used for calls to
+ * IceProxy::Chat::Server::begin_auth.
+ * Create a wrapper instance by calling ::Chat::newCallback_Server_auth.
+ */
+class Callback_Server_auth_Base : public virtual ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_Server_auth_Base> Callback_Server_authPtr;
 
 /**
  * Base class for asynchronous callback wrapper classes used for calls to
@@ -1979,6 +2075,44 @@ public:
 private:
 
     ::Ice::AsyncResultPtr _iceI_begin_UnregisterRoomFactory(const ::Chat::RoomFactoryPrx&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+
+public:
+
+    bool auth(const ::std::string& name, const ::std::string& password, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return end_auth(_iceI_begin_auth(name, password, context, ::IceInternal::dummyCallback, 0, true));
+    }
+
+    ::Ice::AsyncResultPtr begin_auth(const ::std::string& name, const ::std::string& password, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    {
+        return _iceI_begin_auth(name, password, context, ::IceInternal::dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_auth(const ::std::string& name, const ::std::string& password, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_auth(name, password, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_auth(const ::std::string& name, const ::std::string& password, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_auth(name, password, context, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_auth(const ::std::string& name, const ::std::string& password, const ::Chat::Callback_Server_authPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_auth(name, password, ::Ice::noExplicitContext, cb, cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_auth(const ::std::string& name, const ::std::string& password, const ::Ice::Context& context, const ::Chat::Callback_Server_authPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    {
+        return _iceI_begin_auth(name, password, context, cb, cookie);
+    }
+
+    bool end_auth(const ::Ice::AsyncResultPtr& result);
+
+private:
+
+    ::Ice::AsyncResultPtr _iceI_begin_auth(const ::std::string&, const ::std::string&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
 
 public:
 
@@ -2493,6 +2627,11 @@ public:
     bool _iceD_UnregisterRoomFactory(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
 
+    virtual bool auth(const ::std::string& name, const ::std::string& password, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    /// \cond INTERNAL
+    bool _iceD_auth(::IceInternal::Incoming&, const ::Ice::Current&);
+    /// \endcond
+
     /// \cond INTERNAL
     virtual bool _iceDispatch(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
@@ -2699,6 +2838,12 @@ struct StreamableTraits< ::Chat::RoomAlreadyExists>
 
 template<>
 struct StreamableTraits< ::Chat::NoRoomsAvailable>
+{
+    static const StreamHelperCategory helper = StreamHelperCategoryUserException;
+};
+
+template<>
+struct StreamableTraits< ::Chat::NoRoomFactoryAvailable>
 {
     static const StreamHelperCategory helper = StreamHelperCategoryUserException;
 };
@@ -4473,6 +4618,158 @@ template<class T, typename CT> Callback_Server_UnregisterRoomFactoryPtr
 newCallback_Server_UnregisterRoomFactory(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
 {
     return new Callback_Server_UnregisterRoomFactory<T, CT>(instance, 0, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class used for calls to
+ * IceProxy::Chat::Server::begin_auth.
+ * Create a wrapper instance by calling ::Chat::newCallback_Server_auth.
+ */
+template<class T>
+class CallbackNC_Server_auth : public Callback_Server_auth_Base, public ::IceInternal::TwowayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)(bool);
+
+    CallbackNC_Server_auth(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallbackNC<T>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        ServerPrx proxy = ServerPrx::uncheckedCast(result->getProxy());
+        bool ret;
+        try
+        {
+            ret = proxy->end_auth(result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::CallbackNC<T>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::CallbackNC<T>::_callback.get()->*_response)(ret);
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::Chat::Server::begin_auth.
+ */
+template<class T> Callback_Server_authPtr
+newCallback_Server_auth(const IceUtil::Handle<T>& instance, void (T::*cb)(bool), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_Server_auth<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::Chat::Server::begin_auth.
+ */
+template<class T> Callback_Server_authPtr
+newCallback_Server_auth(T* instance, void (T::*cb)(bool), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_Server_auth<T>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Type-safe asynchronous callback wrapper class with cookie support used for calls to
+ * IceProxy::Chat::Server::begin_auth.
+ * Create a wrapper instance by calling ::Chat::newCallback_Server_auth.
+ */
+template<class T, typename CT>
+class Callback_Server_auth : public Callback_Server_auth_Base, public ::IceInternal::TwowayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(bool, const CT&);
+
+    Callback_Server_auth(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallback<T, CT>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    /// \cond INTERNAL
+    virtual void completed(const ::Ice::AsyncResultPtr& result) const
+    {
+        ServerPrx proxy = ServerPrx::uncheckedCast(result->getProxy());
+        bool ret;
+        try
+        {
+            ret = proxy->end_auth(result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::Callback<T, CT>::exception(result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::Callback<T, CT>::_callback.get()->*_response)(ret, CT::dynamicCast(result->getCookie()));
+        }
+    }
+    /// \endcond
+
+private:
+
+    Response _response;
+};
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::Chat::Server::begin_auth.
+ */
+template<class T, typename CT> Callback_Server_authPtr
+newCallback_Server_auth(const IceUtil::Handle<T>& instance, void (T::*cb)(bool, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_Server_auth<T, CT>(instance, cb, excb, sentcb);
+}
+
+/**
+ * Creates a callback wrapper instance that delegates to your object.
+ * Use this overload when your callback methods receive a cookie value.
+ * @param instance The callback object.
+ * @param cb The success method of the callback object.
+ * @param excb The exception method of the callback object.
+ * @param sentcb The sent method of the callback object.
+ * @return An object that can be passed to an asynchronous invocation of IceProxy::Chat::Server::begin_auth.
+ */
+template<class T, typename CT> Callback_Server_authPtr
+newCallback_Server_auth(T* instance, void (T::*cb)(bool, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_Server_auth<T, CT>(instance, cb, excb, sentcb);
 }
 
 /**

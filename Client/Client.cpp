@@ -12,7 +12,7 @@ void Client::initialize(std::string username, std::string password)
     std::cout << "Client initialization" << std::endl;
 
     this->username = username;
-    this->setPassword(password);
+    this->password = password;
 
     std::shared_ptr<Ice::ObjectPrx> object = communicator()->stringToProxy("MainServer:default -p " + std::to_string(Utils::getServerPort()));
     this->serverPrx = Ice::checkedCast<Chat::ServerPrx>(object);
@@ -53,6 +53,9 @@ Chat::RoomList Client::getRoomList()
 
 void Client::joinToRoom(std::string name)
 {
+    auto room = this->serverPrx->FindRoom(name);
+    room->AddUser(this->userPrx, this->password);
+    this->roomPrx = room;
 }
 
 void Client::leaveRoom()

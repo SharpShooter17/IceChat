@@ -11,7 +11,7 @@
 class RoomImpl : public Chat::Room
 {
 public:
-    RoomImpl(std::string name);
+    RoomImpl(std::string name, std::shared_ptr<Chat::ServerPrx> serverPrx);
     virtual std::string getName(const Ice::Current& current) override;
     virtual Chat::UserList getUsers(const Ice::Current& current) override;
     virtual void AddUser(std::shared_ptr<Chat::UserPrx> who, std::string password, const Ice::Current& current) override;
@@ -21,6 +21,8 @@ public:
 private:
     std::string name;
     Chat::UserList userList;
+
+    std::shared_ptr<Chat::ServerPrx> serverPrx;
 };
 
 #endif //ICECHAT_ROOMIMPL_HPP

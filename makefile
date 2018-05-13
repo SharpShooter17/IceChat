@@ -12,7 +12,7 @@ ROOMFACTORYSRC = RoomServer
 COMMONDIR = Common
 
 INCLUDES = -I $(CLIENTSRCDIR) -I $(ROOMFACTORYSRC) -I $(SERVERSRCDIR) -I $(COMMONDIR)
-SRCCOMMON = $(COMMONDIR)/chat.cpp $(COMMONDIR)/Impl/RoomFactoryImpl.cpp $(COMMONDIR)/Impl/RoomImpl.cpp $(COMMONDIR)/Impl/ServerImpl.cpp $(COMMONDIR)/Impl/UserImpl.cpp $(COMMONDIR)/Utils.cpp $(COMMONDIR)/Impl/Auth.cpp
+SRCCOMMON = $(COMMONDIR)/chat.cpp $(COMMONDIR)/Impl/RoomFactoryImpl.cpp $(COMMONDIR)/Impl/RoomImpl.cpp $(COMMONDIR)/Impl/ServerImpl.cpp $(COMMONDIR)/Impl/UserImpl.cpp $(COMMONDIR)/Utils.cpp
 SRCCLIENT = $(SRCCOMMON) $(CLIENTSRCDIR)/main.cpp $(CLIENTSRCDIR)/Client.cpp
 SRCSERVER = $(SRCCOMMON) $(SERVERSRCDIR)/main.cpp $(SERVERSRCDIR)/ServerMain.cpp
 SRCROOMFACTORY = $(SRCCOMMON) $(ROOMFACTORYSRC)/main.cpp $(ROOMFACTORYSRC)/RoomFactory.cpp

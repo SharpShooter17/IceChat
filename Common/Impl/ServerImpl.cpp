@@ -5,8 +5,6 @@
 #include "RoomFactoryImpl.hpp"
 #include "UserImpl.hpp"
 #include <iostream>
-#include "Auth.hpp"
-
 
 std::shared_ptr<Chat::RoomPrx> ServerImpl::CreateRoom(std::string name, const Ice::Current& current)
 {
@@ -17,9 +15,9 @@ std::shared_ptr<Chat::RoomPrx> ServerImpl::CreateRoom(std::string name, const Ic
         }
     }
 
-    if (this->roomList.empty())
+    if (this->roomFactoryList.empty())
     {
-        throw Chat::NoRoomsAvailable();
+        throw Chat::NoRoomFactoryAvailable();
     }
 
     auto roomFactory = this->roomFactoryList.back();
@@ -53,7 +51,12 @@ std::shared_ptr<Chat::RoomPrx> ServerImpl::FindRoom(std::string name, const Ice:
 
 void ServerImpl::RegisterUser(std::string name, std::string password, const Ice::Current& current)
 {
-    Auth::registerUser(name, password);
+    if ( this->auth(name, password, current) == true )
+    {
+        throw Chat::UserAlreadyExists();
+    }
+
+    this->registeredUsers.insert( std::pair<std::string, std::string>(name, password) );
 
     Ice::Identity id;
     id.name = "User_" + name;
@@ -68,7 +71,17 @@ void ServerImpl::RegisterUser(std::string name, std::string password, const Ice:
 
 void ServerImpl::ChangePassword(std::shared_ptr<Chat::UserPrx> user, std::string oldpassword, std::string newpassword, const Ice::Current& current)
 {
-    Auth::changePassword(user->getName(), oldpassword, newpassword);
+    std::string name = user->getName();
+
+    if ( !this->auth(name, oldpassword, current) )
+    {
+        throw Chat::AuthenticationFailed();
+    }
+
+    auto registeredUser = this->registeredUsers.find(name);
+
+    registeredUser->second = newpassword;
+
     std::cout << "Password has been changed" << std::endl;
 }
 
@@ -85,10 +98,25 @@ void ServerImpl::RegisterRoomFactory(std::shared_ptr<Chat::RoomFactoryPrx> facto
 
 void ServerImpl::UnregisterRoomFactory(std::shared_ptr<Chat::RoomFactoryPrx> factory, const Ice::Current& current)
 {
-    //this->roomFactoryList.erase(factory);
+    for ( Chat::RoomFactoryList::iterator it = this->roomFactoryList.begin(); it != this->roomFactoryList.end(); it++)
+    {
+        if ( *it == factory )
+        {
+            this->roomFactoryList.erase(it);
+            std::cout << "Room factory has been uregistered" << std::endl;
+            return;
+        }
+    }
 }
 
-bool ServerImpl::auth(std::string username, std::string password)
+bool ServerImpl::auth(std::string name, std::string password, const Ice::Current& current)
 {
-    return Auth::auth(username, password);
+    auto user = this->registeredUsers.find(name);
+
+    if (user == this->registeredUsers.end() || user->second != password )
+    {
+        return false;
+    }
+
+    return true;
 }
