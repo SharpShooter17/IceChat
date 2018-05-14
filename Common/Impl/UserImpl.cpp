@@ -13,12 +13,12 @@ UserImpl::UserImpl(std::string name)
 
 void UserImpl::SendMessage(std::string where, std::shared_ptr<Chat::UserPrx> who, std::string message, const Ice::Current& current)
 {
-    std::cout << where << " - " << who->getName() << std::endl << "\t" << message;
+    std::cout << where << " - " << who->getName() << std::endl << "\t" << message << std::endl;
 }
 
 void UserImpl::SendPrivateMessage(std::shared_ptr<Chat::UserPrx> who, std::string message, const Ice::Current& current)
 {
-    std::cout << who->getName() << std::endl << "\t" << message;
+    std::cout << who->getName() << std::endl << "\t" << message << std::endl;
 }
 
 std::string UserImpl::getName(const Ice::Current& current)

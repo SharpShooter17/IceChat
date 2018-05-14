@@ -1,0 +1,10 @@
+//
+// Created by bartek on 14.05.18.
+//
+
+#ifndef ICECHAT_YOUAREINDIFFERENTROOM_HPP
+#define ICECHAT_YOUAREINDIFFERENTROOM_HPP
+
+class YouAreInDifferentRoom {};
+
+#endif //ICECHAT_YOUAREINDIFFERENTROOM_HPP

@@ -6,6 +6,7 @@
 #include <iostream>
 #include "../Common/Impl/UserImpl.hpp"
 #include "NoPasswordException.hpp"
+#include "YouAreInDifferentRoom.hpp"
 
 void Client::initialize(std::string username, std::string password)
 {
@@ -32,6 +33,8 @@ void Client::initialize(std::string username, std::string password)
         std::cerr << "User already exists exception" << std::endl;
     }
 
+    this->roomPrx = nullptr;
+
     std::cout << "Hello, " << this->username << std::endl;
 }
 
@@ -53,6 +56,11 @@ Chat::RoomList Client::getRoomList()
 
 void Client::joinToRoom(std::string name)
 {
+    if (this->roomPrx != nullptr)
+    {
+        throw YouAreInDifferentRoom();
+    }
+
     auto room = this->serverPrx->FindRoom(name);
     room->AddUser(this->userPrx, this->password);
     this->roomPrx = room;
@@ -67,7 +75,7 @@ void Client::leaveRoom()
     }
 
     this->roomPrx->LeaveRoom(this->userPrx, this->password);
-    //this->userPrx = std::shared_ptr<Chat::RoomPrx>(nullptr);
+    this->roomPrx = nullptr;
 }
 
 void Client::sendMessageToRoom(std::string message)
@@ -103,7 +111,7 @@ int Client::run(int argc, char* argv[])
 
 Client::~Client()
 {
-    //this->leaveRoom();
+    this->leaveRoom();
     std::cout << "Client destroy" << std::endl;
 }
 

@@ -1,6 +1,6 @@
 CC=g++
 ODIR=obj
-CFLAGS = -g -Wall -Wpedantic
+CFLAGS = -g -Wall -Wpedantic -Werror
 LIBSFLAGS = -lpthread -lIce++11 -std=c++11 -DICE_CPP11_MAPPING
 TARGETDIR = Debug/
 TARGETCLIENT = Debug/Client
@@ -41,4 +41,4 @@ $(TARGETSERVER):
 	$(CC) $(CFLAGS) $(INCLUDES) -o $< -o $@
 
 clean:
-	$RM -rf Debug/*
+	rm -r Debug/
