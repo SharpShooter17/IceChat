@@ -9,7 +9,6 @@
 RoomFactoryImpl::RoomFactoryImpl(std::shared_ptr <Chat::ServerPrx> serverPrx) :
     serverPrx(serverPrx)
 {
-
 }
 
 std::shared_ptr<Chat::RoomPrx> RoomFactoryImpl::createRoom(std::string name, const Ice::Current& current)

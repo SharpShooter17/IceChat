@@ -12,7 +12,7 @@ class UserImpl : virtual public Chat::User
 {
 public:
     UserImpl(std::string name);
-    virtual void SendMessage(std::shared_ptr<Chat::RoomPrx> where, std::shared_ptr<Chat::UserPrx> who, std::string message, const Ice::Current& current) override;
+    virtual void SendMessage(std::string where, std::shared_ptr<Chat::UserPrx> who, std::string message, const Ice::Current& current) override;
     virtual void SendPrivateMessage(std::shared_ptr<Chat::UserPrx> who, std::string message, const Ice::Current& current) override;
     virtual std::string getName(const Ice::Current& current) override;
 private:

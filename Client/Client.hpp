@@ -20,7 +20,7 @@ public:
     void leaveRoom();
     void joinToRoom(std::string name);
     void changePassword(std::string password);
-    void sendPrivateMessageToUser(std::string name, std::string message);
+    void sendPrivateMessageToUser(std::shared_ptr<Chat::UserPrx> user, std::string message);
     void sendMessageToRoom(std::string message);
     void setPassword(std::string password);
 

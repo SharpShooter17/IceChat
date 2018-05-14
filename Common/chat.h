@@ -309,7 +309,7 @@ public:
      */
     static const ::std::string& ice_staticId();
 
-    virtual void SendMessage(::std::shared_ptr<RoomPrx> where, ::std::shared_ptr<UserPrx> who, ::std::string message, const ::Ice::Current& current) = 0;
+    virtual void SendMessage(::std::string where, ::std::shared_ptr<UserPrx> who, ::std::string message, const ::Ice::Current& current) = 0;
     /// \cond INTERNAL
     bool _iceD_SendMessage(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond
@@ -540,20 +540,20 @@ class UserPrx : public virtual ::Ice::Proxy<UserPrx, ::Ice::ObjectPrx>
 {
 public:
 
-    void SendMessage(const ::std::shared_ptr<RoomPrx>& where, const ::std::shared_ptr<UserPrx>& who, const ::std::string& message, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    void SendMessage(const ::std::string& where, const ::std::shared_ptr<UserPrx>& who, const ::std::string& message, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
         _makePromiseOutgoing<void>(true, this, &UserPrx::_iceI_SendMessage, where, who, message, context).get();
     }
 
     template<template<typename> class P = ::std::promise>
-    auto SendMessageAsync(const ::std::shared_ptr<RoomPrx>& where, const ::std::shared_ptr<UserPrx>& who, const ::std::string& message, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    auto SendMessageAsync(const ::std::string& where, const ::std::shared_ptr<UserPrx>& who, const ::std::string& message, const ::Ice::Context& context = ::Ice::noExplicitContext)
         -> decltype(::std::declval<P<void>>().get_future())
     {
         return _makePromiseOutgoing<void, P>(false, this, &UserPrx::_iceI_SendMessage, where, who, message, context);
     }
 
     ::std::function<void()>
-    SendMessageAsync(const ::std::shared_ptr<RoomPrx>& where, const ::std::shared_ptr<UserPrx>& who, const ::std::string& message,
+    SendMessageAsync(const ::std::string& where, const ::std::shared_ptr<UserPrx>& who, const ::std::string& message,
                      ::std::function<void()> response,
                      ::std::function<void(::std::exception_ptr)> ex = nullptr,
                      ::std::function<void(bool)> sent = nullptr,
@@ -563,7 +563,7 @@ public:
     }
 
     /// \cond INTERNAL
-    void _iceI_SendMessage(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::shared_ptr<RoomPrx>&, const ::std::shared_ptr<UserPrx>&, const ::std::string&, const ::Ice::Context&);
+    void _iceI_SendMessage(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>&, const ::std::string&, const ::std::shared_ptr<UserPrx>&, const ::std::string&, const ::Ice::Context&);
     /// \endcond
 
     void SendPrivateMessage(const ::std::shared_ptr<UserPrx>& who, const ::std::string& message, const ::Ice::Context& context = ::Ice::noExplicitContext)
@@ -1643,32 +1643,32 @@ class User : public virtual ::Ice::Proxy<User, ::IceProxy::Ice::Object>
 {
 public:
 
-    void SendMessage(const ::Chat::RoomPrx& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    void SendMessage(const ::std::string& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
         end_SendMessage(_iceI_begin_SendMessage(where, who, message, context, ::IceInternal::dummyCallback, 0, true));
     }
 
-    ::Ice::AsyncResultPtr begin_SendMessage(const ::Chat::RoomPrx& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Ice::Context& context = ::Ice::noExplicitContext)
+    ::Ice::AsyncResultPtr begin_SendMessage(const ::std::string& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Ice::Context& context = ::Ice::noExplicitContext)
     {
         return _iceI_begin_SendMessage(where, who, message, context, ::IceInternal::dummyCallback, 0);
     }
 
-    ::Ice::AsyncResultPtr begin_SendMessage(const ::Chat::RoomPrx& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_SendMessage(const ::std::string& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
         return _iceI_begin_SendMessage(where, who, message, ::Ice::noExplicitContext, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_SendMessage(const ::Chat::RoomPrx& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_SendMessage(const ::std::string& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Ice::Context& context, const ::Ice::CallbackPtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
         return _iceI_begin_SendMessage(where, who, message, context, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_SendMessage(const ::Chat::RoomPrx& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Chat::Callback_User_SendMessagePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_SendMessage(const ::std::string& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Chat::Callback_User_SendMessagePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
         return _iceI_begin_SendMessage(where, who, message, ::Ice::noExplicitContext, cb, cookie);
     }
 
-    ::Ice::AsyncResultPtr begin_SendMessage(const ::Chat::RoomPrx& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Ice::Context& context, const ::Chat::Callback_User_SendMessagePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
+    ::Ice::AsyncResultPtr begin_SendMessage(const ::std::string& where, const ::Chat::UserPrx& who, const ::std::string& message, const ::Ice::Context& context, const ::Chat::Callback_User_SendMessagePtr& cb, const ::Ice::LocalObjectPtr& cookie = 0)
     {
         return _iceI_begin_SendMessage(where, who, message, context, cb, cookie);
     }
@@ -1677,7 +1677,7 @@ public:
 
 private:
 
-    ::Ice::AsyncResultPtr _iceI_begin_SendMessage(const ::Chat::RoomPrx&, const ::Chat::UserPrx&, const ::std::string&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
+    ::Ice::AsyncResultPtr _iceI_begin_SendMessage(const ::std::string&, const ::Chat::UserPrx&, const ::std::string&, const ::Ice::Context&, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& cookie = 0, bool sync = false);
 
 public:
 
@@ -2511,7 +2511,7 @@ public:
      */
     static const ::std::string& ice_staticId();
 
-    virtual void SendMessage(const RoomPrx& where, const UserPrx& who, const ::std::string& message, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
+    virtual void SendMessage(const ::std::string& where, const UserPrx& who, const ::std::string& message, const ::Ice::Current& current = ::Ice::emptyCurrent) = 0;
     /// \cond INTERNAL
     bool _iceD_SendMessage(::IceInternal::Incoming&, const ::Ice::Current&);
     /// \endcond

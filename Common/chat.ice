@@ -11,7 +11,7 @@ module Chat {
     exception AuthenticationFailed {};
 
     interface User {
-      void SendMessage(Room* where, User* who, string message);
+      void SendMessage(string where, User* who, string message);
       void SendPrivateMessage(User* who, string message);
       string getName();
     };

@@ -22,7 +22,7 @@ std::shared_ptr<Chat::RoomPrx> ServerImpl::CreateRoom(std::string name, const Ic
 
     auto roomFactory = this->roomFactoryList.back();
 
-    std::cout << "Crating room: " << name << std::endl;
+    std::cout << "Creating room: " << name << std::endl;
 
     std::shared_ptr<Chat::RoomPrx> roomPrx = roomFactory->createRoom(name);
     this->roomList.push_back(roomPrx);
@@ -40,7 +40,8 @@ std::shared_ptr<Chat::RoomPrx> ServerImpl::FindRoom(std::string name, const Ice:
     std::cout << "Find Room name: " << name << std::endl;
     for ( auto roomPrx : this->roomList)
     {
-        if ( roomPrx->getName() == name )
+        std::string roomName = roomPrx->getName();
+        if ( roomName == name )
         {
             return roomPrx;
         }

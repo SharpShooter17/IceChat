@@ -13,7 +13,7 @@ int ServerMain::run(int, char **)
 
     Ice::ObjectAdapterPtr adapterPtr = communicator()->createObjectAdapterWithEndpoints("SimpleAdapter", "default -p 10000");
     Chat::ServerPtr serverPtr = std::shared_ptr<Chat::Server>(new ServerImpl());
-    adapterPtr->add(serverPtr, communicator()->stringToIdentity("MainServer"));
+    adapterPtr->add(serverPtr, Ice::stringToIdentity("MainServer"));
     adapterPtr->activate();
 
     communicator()->waitForShutdown();

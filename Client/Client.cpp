@@ -75,9 +75,9 @@ void Client::sendMessageToRoom(std::string message)
     this->roomPrx->SendMessage(this->userPrx, message, this->password);
 }
 
-void Client::sendPrivateMessageToUser(std::string name, std::string message)
+void Client::sendPrivateMessageToUser(std::shared_ptr<Chat::UserPrx> user, std::string message)
 {
-
+    user->SendPrivateMessage(this->userPrx, message);
 }
 
 void Client::setPassword(std::string password)
@@ -88,7 +88,7 @@ void Client::setPassword(std::string password)
 
 int Client::run(int argc, char* argv[])
 {
-    if (argc != 3)
+    if (argc < 3)
     {
         std::cerr << "Client [username] [password]" << std::endl;
         return -1;

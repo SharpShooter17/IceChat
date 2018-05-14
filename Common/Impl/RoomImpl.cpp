@@ -39,10 +39,10 @@ void RoomImpl::SendMessage(std::shared_ptr<Chat::UserPrx> who, std::string messa
         throw Chat::AuthenticationFailed();
     }
 
-    std::cout << "Sending message\n";
+    std::cout << "Sending message: " << message << std::endl;
     for (auto userPrx : this->userList)
     {
-        //userPrx->SendMessage(this, who, message);
+        userPrx->SendMessage(this->name, who, message);
     }
 }
 

@@ -11,9 +11,9 @@ UserImpl::UserImpl(std::string name)
     this->name = name;
 }
 
-void UserImpl::SendMessage(std::shared_ptr<Chat::RoomPrx> where, std::shared_ptr<Chat::UserPrx> who, std::string message, const Ice::Current& current)
+void UserImpl::SendMessage(std::string where, std::shared_ptr<Chat::UserPrx> who, std::string message, const Ice::Current& current)
 {
-    std::cout << where->getName() << " - " << who->getName() << std::endl << "\t" << message;
+    std::cout << where << " - " << who->getName() << std::endl << "\t" << message;
 }
 
 void UserImpl::SendPrivateMessage(std::shared_ptr<Chat::UserPrx> who, std::string message, const Ice::Current& current)

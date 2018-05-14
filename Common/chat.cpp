@@ -269,7 +269,7 @@ Chat::User::_iceD_SendMessage(::IceInternal::Incoming& inS, const ::Ice::Current
 {
     _iceCheckMode(::Ice::OperationMode::Normal, current.mode);
     auto istr = inS.startReadParams();
-    ::std::shared_ptr<RoomPrx> iceP_where;
+    ::std::string iceP_where;
     ::std::shared_ptr<UserPrx> iceP_who;
     ::std::string iceP_message;
     istr->readAll(iceP_where, iceP_who, iceP_message);
@@ -879,7 +879,7 @@ Chat::RoomFactory::_iceDispatch(::IceInternal::Incoming& in, const ::Ice::Curren
 
 /// \cond INTERNAL
 void
-Chat::UserPrx::_iceI_SendMessage(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::shared_ptr<RoomPrx>& iceP_where, const ::std::shared_ptr<UserPrx>& iceP_who, const ::std::string& iceP_message, const ::Ice::Context& context)
+Chat::UserPrx::_iceI_SendMessage(const ::std::shared_ptr<::IceInternal::OutgoingAsyncT<void>>& outAsync, const ::std::string& iceP_where, const ::std::shared_ptr<UserPrx>& iceP_who, const ::std::string& iceP_message, const ::Ice::Context& context)
 {
     outAsync->invoke(iceC_Chat_User_SendMessage_name, ::Ice::OperationMode::Normal, ::Ice::FormatType::DefaultFormat, context,
         [&](::Ice::OutputStream* ostr)
@@ -1595,7 +1595,7 @@ void
 /// \endcond
 
 ::Ice::AsyncResultPtr
-IceProxy::Chat::User::_iceI_begin_SendMessage(const ::Chat::RoomPrx& iceP_where, const ::Chat::UserPrx& iceP_who, const ::std::string& iceP_message, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
+IceProxy::Chat::User::_iceI_begin_SendMessage(const ::std::string& iceP_where, const ::Chat::UserPrx& iceP_who, const ::std::string& iceP_message, const ::Ice::Context& context, const ::IceInternal::CallbackBasePtr& del, const ::Ice::LocalObjectPtr& cookie, bool sync)
 {
     ::IceInternal::OutgoingAsyncPtr result = new ::IceInternal::CallbackOutgoing(this, iceC_Chat_User_SendMessage_name, del, cookie, sync);
     try
@@ -2433,7 +2433,7 @@ Chat::User::_iceD_SendMessage(::IceInternal::Incoming& inS, const ::Ice::Current
 {
     _iceCheckMode(::Ice::Normal, current.mode);
     ::Ice::InputStream* istr = inS.startReadParams();
-    RoomPrx iceP_where;
+    ::std::string iceP_where;
     UserPrx iceP_who;
     ::std::string iceP_message;
     istr->read(iceP_where);
